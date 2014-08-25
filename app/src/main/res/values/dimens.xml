@@ -1,0 +1,26 @@
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="navigation_drawer_width">240dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_size">72dp</dimen>
+
+
+    <dimen name="fab_comment_margin">32dp</dimen>
+    <dimen name="fab_size_negative">-72dp</dimen>
+
+    <dimen name="infinity">5000dp</dimen>
+
+    <!-- fab_margin + fab_size + fab_comment_margin -->
+    <dimen name="comment_space_height">120dp</dimen>
+
+    <dimen name="comment_margin">15dp</dimen>
+    <dimen name="comment_padding">10dp</dimen>
+    <dimen name="minimum_touch_size">48dp</dimen>
+
+    <integer name="upvote_strip_height_percent">50</integer>
+    <integer name="novote_strip_height_percent">30</integer>
+    <integer name="downvote_strip_height_percent">20</integer>
+</resources>

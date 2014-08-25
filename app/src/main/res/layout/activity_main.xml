@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Main">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <be.geelen.yarr.VoteViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <be.geelen.yarr.postPages.PostPageIndicator
+                android:id="@+id/circle_page_indicator"
+                android:layout_height="15dp"
+                android:layout_width="match_parent" />
+
+            <!--<com.viewpagerindicator.CirclePageIndicator-->
+                <!--android:id="@+id/circle_page_indicator"-->
+                <!--android:padding="10dip"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_width="match_parent" />-->
+        </LinearLayout>
+
+        <!-- lines -->
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="right"
+            android:weightSum="100">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="@integer/upvote_strip_height_percent"
+                android:background="@color/reddit_upvote" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="@integer/novote_strip_height_percent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="@integer/downvote_strip_height_percent"
+                android:background="@color/reddit_downvote" />
+
+            </LinearLayout>
+
+
+        <!-- comments -->
+        <FrameLayout
+            android:id="@+id/comments_overlay_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </FrameLayout>
+
+    </FrameLayout>
+
+    <fragment
+        android:id="@+id/navigation_drawer"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="be.geelen.yarr.NavigationDrawerFragment"
+        tools:layout="@layout/fragment_navigation_drawer" />
+
+</android.support.v4.widget.DrawerLayout>

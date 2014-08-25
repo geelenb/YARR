@@ -1,0 +1,31 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion '19.1.0'
+
+    defaultConfig {
+        applicationId "be.geelen.yarr"
+        minSdkVersion 15
+        targetSdkVersion 19
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-v4:19.+'
+    compile 'com.squareup.picasso:picasso:2.1.+'
+    compile 'com.github.castorflex.verticalviewpager:library:19.0.1'
+    compile 'com.github.chrisbanes.photoview:library:1.2.3'
+//    compile 'com.github.gabrielemariotti.cards:library:1.8.0'
+    compile 'org.jsoup:jsoup:1.7.3'
+}
+

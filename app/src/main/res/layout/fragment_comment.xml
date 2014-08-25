@@ -1,0 +1,32 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".comments.CommentFragment"
+    android:orientation="vertical"
+    android:background="@color/grey_100">
+
+    <!-- should be a webview, but that doesn't support wrap_content for height -->
+    <TextView
+        android:id="@+id/comment_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/steel_900"
+        android:textColor="@color/grey_0"
+        android:layout_marginTop="@dimen/comment_margin"
+        android:layout_marginLeft="@dimen/comment_margin"
+        android:layout_marginRight="@dimen/comment_margin"
+        android:padding="@dimen/comment_padding"
+        android:minHeight="@dimen/minimum_touch_size"
+        />
+
+    <!-- keep this one as close to the root as possible, otherwise there will be stackoverflows. -->
+    <!--<be.geelen.yarr.comments.CommentViewPager-->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/comment_replies_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="2000dp">
+        </android.support.v4.view.ViewPager>
+    <!--</be.geelen.yarr.comments.CommentViewPager>-->
+</LinearLayout>

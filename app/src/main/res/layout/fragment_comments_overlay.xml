@@ -1,0 +1,65 @@
+<FrameLayout
+    android:id="@+id/fragment_comments_overlay"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".comments.CommentsOverlayFragment" >
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-3000dp"
+        android:layout_gravity="bottom"
+        >
+
+        <!-- this view should start south of the screen  -->
+        <LinearLayout
+            android:id="@+id/main_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/steel_800">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/comment_space_height"/>
+
+            <be.geelen.yarr.comments.CommentViewPager
+                android:id="@+id/root_comment_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="2000dp">
+                </be.geelen.yarr.comments.CommentViewPager>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.faizmalkani.floatingactionbutton.Fab
+        android:id="@+id/reddit_comment_fab"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
+        android:layout_gravity="bottom|right"
+
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin" />
+
+    <com.faizmalkani.floatingactionbutton.Fab
+        android:id="@+id/refresh_comments_fab"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
+        android:layout_gravity="top|left"
+
+        android:layout_marginTop="@dimen/fab_comment_margin"
+        android:layout_marginLeft="@dimen/fab_size_negative" />
+
+    <com.faizmalkani.floatingactionbutton.Fab
+        android:id="@+id/vote_fab"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
+        android:layout_gravity="top|right"
+
+        android:layout_marginTop="@dimen/fab_comment_margin"
+        android:layout_marginRight="@dimen/fab_size_negative" />
+</FrameLayout>
