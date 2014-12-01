@@ -7,16 +7,20 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import be.geelen.yarr.R;
+import be.geelen.yarr.tools.Palette;
 
 public class CommentFragment extends Fragment {
     protected static final String JSON_VAL = "json_val";
+    private static final String OP_VAL = "OP";
 
     // this is already the "data" part
     protected JSONObject commentObject;
@@ -24,14 +28,16 @@ public class CommentFragment extends Fragment {
     private ViewPager viewPager;
     private TextView commentTextView;
     private CommentsAdapter commentsAdapter;
+    private LinearLayout commentButtons;
 
     public CommentFragment() {
     }
 
-    public static CommentFragment newInstance(String json) {
+    public static CommentFragment newInstance(String json, String op) {
         CommentFragment commentFragment = new CommentFragment();
         Bundle args = new Bundle();
         args.putString(JSON_VAL, json);
+        args.putString(OP_VAL, op);
         commentFragment.setArguments(args);
         return commentFragment;
     }
@@ -43,12 +49,37 @@ public class CommentFragment extends Fragment {
 
         setJson(getArguments().getString(JSON_VAL));
 
+        commentButtons = (LinearLayout) view.findViewById(R.id.comment_buttons);
         commentTextView = (TextView) view.findViewById(R.id.comment_textview);
         viewPager = (ViewPager) view.findViewById(R.id.comment_replies_viewpager);
+        TextView authorTextView = (TextView) view.findViewById(R.id.comment_author);
+        TextView pointsTextView = (TextView) view.findViewById(R.id.comment_points);
+
+        commentButtons.setBackgroundColor(Palette.get(getResources(), 900));
+        commentTextView.setBackgroundColor(Palette.get(getResources(), 900));
 
         try {
             if (commentObject.has("body")) {
                 commentTextView.setText(Html.fromHtml(Html.fromHtml(commentObject.getString("body_html")).toString()).toString());
+                commentTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) commentButtons.getLayoutParams();
+                        if (commentButtons.getHeight() == 0) {
+                            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                        } else {
+                            layoutParams.height = 0;
+                        }
+                        commentButtons.setLayoutParams(layoutParams);
+                        commentButtons.invalidate();
+                    }
+                });
+
+                authorTextView.setText(commentObject.getString("author"));
+                pointsTextView.setText(
+                        String.format(
+                                getResources().getString(R.string.X_points),
+                                commentObject.getInt("score")));
 
                 if ("".equals(commentObject.get("replies"))) {
                     ((ViewGroup) viewPager.getParent()).removeView(viewPager);
@@ -57,7 +88,7 @@ public class CommentFragment extends Fragment {
                             .getJSONObject("replies")
                             .getJSONObject("data")
                             .getJSONArray("children");
-                    commentsAdapter = new CommentsAdapter(getChildFragmentManager(), replyArray);
+                    commentsAdapter = new CommentsAdapter(getChildFragmentManager(), replyArray, getArguments().getString(OP_VAL));
                     viewPager.setAdapter(commentsAdapter);
                 }
             } else {
@@ -73,7 +104,7 @@ public class CommentFragment extends Fragment {
                 commentTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        Toast.makeText(getActivity(), "TODO: implement \"More comments...\"", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "TODO: implement \"More comments...\"", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -94,5 +125,9 @@ public class CommentFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public interface OnVoteListener {
+        public void onVote(int position, boolean up);
     }
 }

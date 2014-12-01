@@ -2,13 +2,13 @@ package be.geelen.yarr.tools;
 
 
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.LinearLayout;
 
 public class Anim {
     public static void expand(final View v) {
-        v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        v.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         final int targtetHeight = v.getMeasuredHeight();
 
         v.getLayoutParams().height = 0;
@@ -18,7 +18,7 @@ public class Anim {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = interpolatedTime == 1
-                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        ? LinearLayout.LayoutParams.WRAP_CONTENT
                         : (int)(targtetHeight * interpolatedTime);
                 v.requestLayout();
             }

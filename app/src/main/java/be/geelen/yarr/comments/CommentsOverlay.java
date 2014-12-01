@@ -11,15 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.faizmalkani.floatingactionbutton.Fab;
 
+import org.json.JSONObject;
+
 import be.geelen.yarr.MainActivity;
 import be.geelen.yarr.R;
-import be.geelen.yarr.postPages.PostPageIndicator;
+import be.geelen.yarr.tools.Palette;
 
-public class CommentsOverlay extends Fragment {
+public class CommentsOverlay extends Fragment implements ViewPager.OnPageChangeListener{
     private static final String PERMALINK_VAL = "PERMALINK";
 
     private View view;
@@ -30,20 +33,9 @@ public class CommentsOverlay extends Fragment {
     private Fab voteFab;
     private ScrollView scrollView;
     private ViewPager rootCommentViewPager;
-//    private PostPageIndicator ppi;
 
     public static CommentsOverlay newInstance() {
         return new CommentsOverlay();
-    }
-
-    // Todo: delete
-    @Deprecated
-    public static CommentsOverlay newInstance(String permalink) {
-        CommentsOverlay commentsOverlay = new CommentsOverlay();
-        Bundle args = new Bundle();
-        args.putString(PERMALINK_VAL, permalink);
-        commentsOverlay.setArguments(args);
-        return commentsOverlay;
     }
 
     @Override
@@ -57,7 +49,7 @@ public class CommentsOverlay extends Fragment {
         voteFab = (Fab) view.findViewById(R.id.vote_fab);
         scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
         rootCommentViewPager = (ViewPager) view.findViewById(R.id.root_comment_viewpager);
-//        ppi = (PostPageIndicator) view.findViewById(R.id.circle_page_indicator);
+        LinearLayout mainLinearLayout = (LinearLayout) view.findViewById(R.id.main_linear_layout);
 
         commentFab.setFabColor(getResources().getColor(R.color.blue_100));
         commentFab.setFabDrawable(getResources().getDrawable(R.drawable.ic_comments));
@@ -68,11 +60,13 @@ public class CommentsOverlay extends Fragment {
             }
         });
 
-        refreshFab.setFabColor(getResources().getColor(R.color.reddit_neutral));
+        refreshFab.setFabColor(Palette.getGrey(getResources(), 300));
         refreshFab.setFabDrawable(getResources().getDrawable(R.drawable.ic_refresh));
 
-        voteFab.setFabColor(getResources().getColor(R.color.reddit_neutral));
+        voteFab.setFabColor(Palette.getGrey(getResources(), 300));
         voteFab.setFabDrawable(getResources().getDrawable(R.drawable.ic_circle_blank));
+
+        mainLinearLayout.setBackgroundColor(Palette.get(getResources(), 800));
 
         return view;
     }
@@ -101,11 +95,10 @@ public class CommentsOverlay extends Fragment {
             if (rootCommentViewPager.getAdapter() == null) {
                 rootCommentViewPager.setMinimumHeight((int) (view.getHeight() - getResources().getDimension(R.dimen.comment_space_height)));
                 scrollView.setLayoutParams(new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//                scrollView.set
             }
 
-            rootCommentViewPager.setAdapter(new CommentsAdapter(getChildFragmentManager(), ((MainActivity) getActivity()).getCurrentPermalink()));
-//            ppi.setViewPager(rootCommentViewPager);
+            String permalink =  ((MainActivity) getActivity()).getCurrentPermalink();
+            rootCommentViewPager.setAdapter(new CommentsAdapter(getChildFragmentManager(), permalink));
 
             commentX = ObjectAnimator.ofFloat(commentFab, "x", parentWidth / 2 - size / 2);
             commentX.setInterpolator(new DecelerateInterpolator());
@@ -122,8 +115,6 @@ public class CommentsOverlay extends Fragment {
             mainY = ObjectAnimator.ofFloat(scrollView, "y",  0);
             mainY.setInterpolator(new DecelerateInterpolator());
         } else {
-//            rootCommentViewPager.setAdapter(null);
-//            ppi.setViewPager(null);
             commentX = ObjectAnimator.ofFloat(commentFab, "x", parentWidth - margin - size);
             commentX.setInterpolator(new AccelerateInterpolator());
 
@@ -152,4 +143,26 @@ public class CommentsOverlay extends Fragment {
     public boolean getOpened() {
         return opened;
     }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        JSONObject postObject = ((MainActivity) getActivity()).getJsonObject(position);
+        if (postObject == null) {
+            commentFab.setText("");
+            return;
+        }
+
+//        commentFab.setText(postObject.get)
+
+//        if ((((MainActivity) getActivity()).getCurrentPermalink()).equals("")) {
+//            this.opened = !opened;
+//            return;
+//        }
+    }
+
+    @Override
+    public void onPageSelected(int position) {}
+
+    @Override
+    public void onPageScrollStateChanged(int state) {}
 }

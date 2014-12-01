@@ -49,7 +49,7 @@ public class PostPageIndicator extends View implements
         postAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
-                for (int i = 0; i < postAdapter.getCount(); i++) {
+                for (int i = 0; i < postAdapter.getNumChildren(); i++) {
                     JSONObject child = postAdapter.getChild(i);
                     checkColorFor(child, i);
                 }
@@ -71,13 +71,13 @@ public class PostPageIndicator extends View implements
                     colors.put(i, getResources().getColor(R.color.reddit_downvote));
                 }
             } else if ("admin".equals(child.get("distinguished"))) {
-                colors.put(i, Color.RED);
+                colors.put(i, getResources().getColor(R.color.reddit_admin));
             } else if ("moderator".equals(child.get("distinguished"))) {
                 colors.put(i, getResources().getColor(R.color.reddit_moderator));
             } else if (child.getBoolean("stickied")) {
-                colors.put(i, getResources().getColor(R.color.grey_600));
+                colors.put(i, getResources().getColor(R.color.reddit_moderator));
             } else if (child.getInt("gilded") > 0) {
-                colors.put(i, Color.YELLOW);
+                colors.put(i, getResources().getColor(R.color.reddit_gold));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -100,7 +100,7 @@ public class PostPageIndicator extends View implements
     @Override
     protected void onDraw(Canvas canvas) {
         PostAdapter adapter = (PostAdapter) voteViewPager.getAdapter();
-        int count = voteViewPager.getAdapter().getCount();
+        int count = ((PostAdapter) voteViewPager.getAdapter()).getNumChildren();
 
         if (count == 0)
             return;

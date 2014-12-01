@@ -1,14 +1,15 @@
 package be.geelen.yarr;
 
-
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
@@ -17,52 +18,35 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class NavigationDrawerFragment extends Fragment {
-    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     private NavigationDrawerCallbacks mCallbacks;
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
-    private ListView view;
+    private View view;
     private View mFragmentContainerView;
 
-    private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
-
-    public NavigationDrawerFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Read in the flag indicating whether or not the user has demonstrated awareness of the
-        // drawer. See PREF_USER_LEARNED_DRAWER for details.
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
-
-        if (savedInstanceState != null) {
-            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
-        }
-
-        // Select either the default item (0) or the last selected item.
-        // selectItem(mCurrentSelectedPosition);
-    }
-
-    @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Indicate that this fragment would like to influence the set of actions in the action bar.
-        setHasOptionsMenu(true);
-    }
 
     public static final String [] links = new String[]{
             "/r/all/",
@@ -74,29 +58,55 @@ public class NavigationDrawerFragment extends Fragment {
             "/r/formula1/",
             "/r/soccer/",
             "/r/nba/",
+            "/r/blog/",
             "/u/prometheus1/m/ask_reddits"
     };
 
+    public NavigationDrawerFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+
+        if (savedInstanceState != null) {
+            mFromSavedInstanceState = true;
+        }
+    }
+
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = (ListView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
-            }
-        });
+        view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
-        Activity activity = getActivity();
+        TextView loginButton = (TextView) view.findViewById(R.id.drawer_login_button);
+
+        loginButton.setOnClickListener(new OnLoginClickListener());
+
+//        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                selectItem(position);
+//            }
+//        });
+
+//        Activity activity = getActivity();
 
 
-        view.setAdapter(new ArrayAdapter<String>(
-                activity.getApplicationContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                links
-        ));
-        view.setItemChecked(mCurrentSelectedPosition, true);
+//        view.setAdapter(new ArrayAdapter<String>(
+//                activity.getApplicationContext(),
+//                android.R.layout.simple_list_item_activated_1,
+//                android.R.id.text1,2
+//                links
+//        ));
         return view;
     }
 
@@ -166,9 +176,8 @@ public class NavigationDrawerFragment extends Fragment {
 
 
     private void selectItem(int position) {
-        mCurrentSelectedPosition = position;
         if (view != null) {
-            view.setItemChecked(position, true);
+//            view.setItemChecked(position, true);
         }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
@@ -195,22 +204,13 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Forward the new configuration the drawer toggle component.
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // If the drawer is open, show the global app actions in the action bar. See also
-        // showGlobalContextActionBar, which controls the top-left area of the action bar.
         if (mDrawerLayout != null && isDrawerOpen()) {
             inflater.inflate(R.menu.global, menu);
             showGlobalContextActionBar();
@@ -224,18 +224,14 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
+//        if (item.getItemId() == R.id.action_example) {
+//            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * 'context', rather than just what's in the current screen.
-     */
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
@@ -247,13 +243,50 @@ public class NavigationDrawerFragment extends Fragment {
         return getActivity().getActionBar();
     }
 
-    /**
-     * Callbacks interface that all activities using this fragment must implement.
-     */
     public static interface NavigationDrawerCallbacks {
-        /**
-         * Called when an item in the navigation drawer is selected.
-         */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+    private class OnLoginClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            mDrawerToggle.onDrawerClosed(mDrawerLayout);
+            new AsyncTask<String, Integer, String>() {
+                protected String doInBackground(String... strings){
+                    String response="";
+
+                    HttpClient client = new DefaultHttpClient();
+                    HttpPost httpPost = new HttpPost("http://www.reddit.com/api/login");
+                    try{
+                        List<NameValuePair> args = new ArrayList<NameValuePair>(2);
+
+                        args.add(new BasicNameValuePair("api_type", "json"));
+                        args.add(new BasicNameValuePair("passwd", strings[1]));
+                        args.add(new BasicNameValuePair("rem", "true"));
+                        args.add(new BasicNameValuePair("user", strings[0]));
+
+                        httpPost.setEntity(new UrlEncodedFormEntity(args));
+
+                        response = client.execute(httpPost, new BasicResponseHandler());
+
+//                        String secondresponse;
+//                        secondresponse = client.execute(new HttpGet("http://reddit.com/.json"), new BasicResponseHandler());
+                    }catch(ClientProtocolException e){
+                        e.printStackTrace();
+                    }catch(IOException e){
+                        e.printStackTrace();
+                    }
+
+                    return response;
+                }
+
+                @Override
+                protected void onPostExecute(String s) {
+                    super.onPostExecute(s);
+                    ((MainActivity) getActivity()).setLoginJson(s);
+                }
+            }.execute("golfbreker", "mnb");
+//            LoginDialogFragment.build(getChildFragmentManager());
+        }
     }
 }

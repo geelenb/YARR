@@ -1,9 +1,47 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent"
-    android:dividerHeight="0dp"
-    android:background="#cccc"
-    tools:context=".NavigationDrawerFragment" />
+    android:divider="@color/red_400"
+    android:dividerHeight="10dp"
+    android:showDividers="middle"
+    android:adjustViewBounds="true"
+    android:background="@color/steel_800"
+    tools:context=".NavigationDrawerFragment"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <TextView
+            android:id="@+id/drawer_login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:height="48dp"
+            android:text="Log in"
+            android:textColor="#ffffff" />
+
+        </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:height="48dp"
+        android:text="test"
+        android:textColor="#ffffff"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:height="48dp"
+        android:text="test"
+        android:textColor="#ffffff"/>
+
+    </LinearLayout>

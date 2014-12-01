@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Reddit -->
-    <color name="reddit_orange">#ff5700</color>
-    <color name="reddit_orangered">#ff4500</color>
-    <color name="reddit_upvote">#ff8b60</color>
-    <color name="reddit_neutral">#c6c6c6</color>
-    <color name="reddit_downvote">#9494ff</color>
-    <color name="reddit_light_bg">#eff7ff</color>
-    <color name="reddit_header">#cee3f8</color>
-    <color name="reddit_ui_text">#336699</color>
-    <color name="reddit_moderator">#228822</color>
-
     <!-- RED -->
     <color name="red_50">#fde0dc</color>
     <color name="red_100">#f9bdbb</color>
@@ -291,7 +280,7 @@
     <color name="grey_700">#616161</color>
     <color name="grey_800">#424242</color>
     <color name="grey_900">#212121</color>
-    <color name="grey_1000">#ffffff</color> <!-- Grey 1000 (Black) -->
+    <color name="grey_1000">#000000</color> <!-- Grey 1000 (Black) -->
 
     <!-- BLUE GREY -->
     <color name="steel_50">#eceff1</color>

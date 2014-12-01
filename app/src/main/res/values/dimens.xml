@@ -8,17 +8,24 @@
     <dimen name="fab_size">72dp</dimen>
 
 
-    <dimen name="fab_comment_margin">32dp</dimen>
+    <dimen name="fab_corner_margin">32dp</dimen>
     <dimen name="fab_size_negative">-72dp</dimen>
 
-    <dimen name="infinity">5000dp</dimen>
+    <dimen name="comment_viewpager_height">5000dp</dimen>
 
     <!-- fab_margin + fab_size + fab_comment_margin -->
     <dimen name="comment_space_height">120dp</dimen>
 
-    <dimen name="comment_margin">15dp</dimen>
+    <dimen name="comment_margin">20dp</dimen>
+    <dimen name="comment_seperator_margin">10dp</dimen>
     <dimen name="comment_padding">10dp</dimen>
-    <dimen name="minimum_touch_size">48dp</dimen>
+    <dimen name="comment_minimum_height">48dp</dimen>
+    <dimen name="comment_buttons_height">48dp</dimen>
+    <dimen name="comment_button_padding">12dp</dimen>
+
+    <dimen name="last_page_button_padding_vertical">4dp</dimen>
+    <dimen name="last_page_button_padding_horizontal">20dp</dimen>
+    <dimen name="last_page_button_margin">5dp</dimen>
 
     <integer name="upvote_strip_height_percent">50</integer>
     <integer name="novote_strip_height_percent">30</integer>

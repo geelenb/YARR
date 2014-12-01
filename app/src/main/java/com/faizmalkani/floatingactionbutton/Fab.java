@@ -1,27 +1,22 @@
 package com.faizmalkani.floatingactionbutton;
-import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 
 public class Fab extends View
 {
     private Paint mButtonPaint, mDrawablePaint;
-    private Bitmap  mBitmap;
+    private Bitmap mBitmap;
+    private String text = "";
 
     public Fab(Context context, AttributeSet attributeSet)
     {
@@ -38,13 +33,18 @@ public class Fab extends View
         init(fabColor);
     }
 
+    public void setText(String text)
+    {
+        this.text = text;
+        invalidate();
+    }
+
     public void setFabDrawable(Drawable fabDrawable)
     {
         Drawable myDrawable = fabDrawable;
         mBitmap = ((BitmapDrawable) myDrawable).getBitmap();
         invalidate();
     }
-
 
     public void init(int fabColor)
     {
@@ -65,6 +65,13 @@ public class Fab extends View
         if(mButtonPaint != null) {
             canvas.drawCircle(getWidth()/2, getHeight()/2,(float) (getWidth()/2.6), mButtonPaint);
             canvas.drawBitmap(mBitmap, (getWidth() - mBitmap.getWidth()) / 2, (getHeight() - mBitmap.getHeight()) / 2, mDrawablePaint);
+
+            Rect bounds = new Rect();
+            mButtonPaint.getTextBounds(text, 0, text.length(), bounds);
+            int x = (canvas.getWidth() / 2) - (bounds.width() / 2);
+            int y = (canvas.getHeight() / 2) - (bounds.height() / 2);
+
+            canvas.drawText(text, x, y, mButtonPaint);
         }
     }
 

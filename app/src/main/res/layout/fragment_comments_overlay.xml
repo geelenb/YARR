@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="-3000dp"
         android:layout_gravity="bottom"
+        android:fillViewport="true"
         >
 
         <!-- this view should start south of the screen  -->
@@ -19,8 +20,7 @@
             android:id="@+id/main_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/steel_800">
+            android:orientation="vertical">
 
             <Space
                 android:layout_width="match_parent"
@@ -51,7 +51,7 @@
         android:layout_height="@dimen/fab_size"
         android:layout_gravity="top|left"
 
-        android:layout_marginTop="@dimen/fab_comment_margin"
+        android:layout_marginTop="@dimen/fab_corner_margin"
         android:layout_marginLeft="@dimen/fab_size_negative" />
 
     <com.faizmalkani.floatingactionbutton.Fab
@@ -60,6 +60,6 @@
         android:layout_height="@dimen/fab_size"
         android:layout_gravity="top|right"
 
-        android:layout_marginTop="@dimen/fab_comment_margin"
+        android:layout_marginTop="@dimen/fab_corner_margin"
         android:layout_marginRight="@dimen/fab_size_negative" />
 </FrameLayout>
